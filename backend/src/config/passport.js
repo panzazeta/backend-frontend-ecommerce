@@ -1,22 +1,26 @@
-import local from 'passport-local';
-import GithubStrategy from 'passport-github2';
+import local from 'passport-local' //Importo la estrategia
+import GithubStrategy from 'passport-github2'
 import jwt from 'passport-jwt'
 import passport from 'passport'
 import { createHash, validatePassword } from '../utils/bycript.js'
 import { userModel } from '../models/users.models.js'
-// import dotenv from 'dotenv';
+import 'dotenv/config'
 
-//Estrategias
-const LocalStrategy = local.Strategy;
-const JWTStrategy = jwt.Strategy;
-const ExtractJWT = jwt.ExtractJwt;
+//Defino la estregia a utilizar
+const LocalStrategy = local.Strategy
+const JWTStrategy = jwt.Strategy
+const ExtractJWT = jwt.ExtractJwt //Extrar de las cookies el token
 
 const initializePassport = () => {
 
     const cookieExtractor = req => {
-        const token = req.cookies.jwtCookie ? req.cookies.jwtCookie : {}
+        //En lugar de tomar de las cookies directamente todo de la peticion
+        const token = req.headers.authorization ? req.headers.authorization : {}
+
         console.log("cookieExtractor", token)
+
         return token
+
     }
 
     passport.use('jwt', new JWTStrategy({
@@ -29,6 +33,7 @@ const initializePassport = () => {
         } catch (error) {
             return done(error)
         }
+
     }))
 
     passport.use('register', new LocalStrategy(
@@ -83,6 +88,7 @@ const initializePassport = () => {
             }
         }))
 
+
     passport.use('github', new GithubStrategy({
         clientID: process.env.CLIENT_ID,
         clientSecret: process.env.SECRET_CLIENT,
@@ -100,7 +106,7 @@ const initializePassport = () => {
                     first_name: profile._json.name,
                     last_name: ' ',
                     email: profile._json.email,
-                    age: 18,
+                    age: 18, //Edad por defecto
                     password: createHash(profile._json.email + profile._json.name)
                 })
                 done(null, userCreated)

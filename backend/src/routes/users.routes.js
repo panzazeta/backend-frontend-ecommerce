@@ -30,7 +30,7 @@ userRouter.put('/:id', async (req, res) => {
     const { id } = req.params
     const { first_name, last_name, age, email, password } = req.body
     try {
-        const user = await userModel.findByIdAndUpdate(id, { first_name, last_name, age, email, password})
+        const user = await userModel.findByIdAndUpdate(id, { first_name, last_name, age, email, password })
         if (user) {
             res.status(200).send({ respuesta: 'OK', mensaje: user })
         } else {
