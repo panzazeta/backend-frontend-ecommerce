@@ -9,7 +9,7 @@ export const Login = () => {
         e.preventDefault()
         const datForm = new FormData(formRef.current) //Tranformo un HTML en un objet iterator
         const data = Object.fromEntries(datForm)
-        console.log(data)
+
         const response = await fetch('http://localhost:4000/api/sessions/login', {
             method: 'POST',
             headers: {
@@ -17,11 +17,12 @@ export const Login = () => {
             },
             body: JSON.stringify(data)
         })
-
         if (response.status == 200) {
             const datos = await response.json()
-            document.cookie = `jwtCookie=${datos.token}; expires${new Date(Date.now() + 1 * 24 * 60 * 60 * 1000).toUTCString()};path=/;httponly=true`
+            console.log(datos)
+            document.cookie = `jwtCookie=${datos.token}; expires${new Date(Date.now() + 1 * 24 * 60 * 60 * 1000).toUTCString()};path=/;`
             navigate('/products')
+
         } else {
             console.log(response)
         }
@@ -39,7 +40,7 @@ export const Login = () => {
                     <label htmlFor="password" className="form-label">Password: </label>
                     <input type="password" name="password" className="form-control" />
                 </div>
-                <button type="submit" className="btn btn-dark">Iniciar Sesion</button>
+                <button type="submit" className="btn btn-primary">Iniciar Sesion</button>
             </form>
 
         </div>
