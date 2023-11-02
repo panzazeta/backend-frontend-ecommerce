@@ -1,6 +1,5 @@
 import { productModel } from "../models/products.models.js";
 
-//En controllers normalmente se hace metodo HTTP + Modelo para referirse al nombre del controlador
 export const getProducts = async (req, res) => {
     const { limit, page, filter, sort } = req.query
 
