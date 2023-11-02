@@ -51,7 +51,6 @@ const initializePassport = () => {
                 }
 
                 //Crear usuario
-
                 const passwordHash = createHash(password)
                 const userCreated = await userModel.create({
                     first_name: first_name,
