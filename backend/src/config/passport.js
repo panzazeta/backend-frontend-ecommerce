@@ -9,7 +9,7 @@ import 'dotenv/config'
 //Defino la estregia a utilizar
 const LocalStrategy = local.Strategy
 const JWTStrategy = jwt.Strategy
-const ExtractJWT = jwt.ExtractJwt //Extrar de las cookies el token
+const ExtractJWT = jwt.ExtractJwt //Extraer de las cookies el token
 
 const initializePassport = () => {
 

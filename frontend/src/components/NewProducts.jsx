@@ -1,6 +1,6 @@
 import { useRef } from "react"
 import { useNavigate } from "react-router-dom"
-import { getCookiesByName } from "../utils/formsUtils.js"
+// import { getCookiesByName } from "../utils/formsUtils.js"
 
 export const NewProducts = () => {
     const formRef = useRef(null)
