@@ -12,7 +12,7 @@ export const getProducts = async (req, res) => {
         const prods = await productModel.paginate({ filter: filter }, { limit: lim, page: pag, sort: { price: ord } })
 
         if (prods) {
-            return res.status(200).send(products)
+            return res.status(200).send(prods)
         }
         res.status(404).send({ error: "Productos no encontrados" })
 
@@ -29,7 +29,7 @@ export const getProductById = async (req, res) => {
         const prod = await productModel.findById(id)
 
         if (prod) {
-            return res.status(200).send(product)
+            return res.status(200).send(prod)
         }
         res.status(404).send({ error: "Producto no encontrado" })
 
@@ -65,7 +65,7 @@ export const putProductById = async (req, res) => {
         const prod = await productModel.findByIdAndUpdate(id, { title, description, code, price, stock, category })
 
         if (prod) {
-            return res.status(200).send(product)
+            return res.status(200).send(prod)
         }
 
         res.status(404).send({ error: "Producto no encontrado" })
@@ -82,7 +82,7 @@ export const deleteProductById = async (req, res) => {
         const prod = await productModel.findByIdAndDelete(id)
 
         if (prod) {
-            return res.status(200).send(product)
+            return res.status(200).send(prod)
         }
 
         res.status(404).send({ error: "Producto no encontrado" })
