@@ -3,16 +3,9 @@ import jwt from 'jsonwebtoken'
 
 export const generateToken = (user) => {
 
-    /*
-        1° parametro: Objeto asociado al token (Usuario)
-        2° parametro: Clave privada para el cifrado
-        3° parametro: Tiempo de expiracion
-    */
-
-    const token = jwt.sign({ user }, process.env.JWT_SECRET, { expiresIn: '12h' })
-
+    const token = jwt.sign({ user }, process.env.JWT_SECRET, { expiresIn: '12h' });
+    console.log(token);
     return token
-
 }
 
 export const authToken = (req, res, next) => {
@@ -32,8 +25,7 @@ export const authToken = (req, res, next) => {
     })
 
     //Usuario valido
-    req.user = credential.user
+    req.user = credential.user;
     next()
-
 
 }

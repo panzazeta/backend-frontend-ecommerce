@@ -1,6 +1,6 @@
 import { useRef } from "react"
 import { useNavigate } from "react-router-dom"
-// import { getCookiesByName } from "../utils/formsUtils.js"
+import { getCookiesByName } from "../utils/formsUtils.js"
 
 export const NewProducts = () => {
     const formRef = useRef(null)
@@ -8,7 +8,7 @@ export const NewProducts = () => {
 
     const handleSumbit = async (e) => {
         e.preventDefault()
-        const datForm = new FormData(formRef.current) //Tranformo un HTML en un objet iterator
+        const datForm = new FormData(formRef.current) //Tranformo un HTML en un object iterator
         const data = Object.fromEntries(datForm)
         const token = getCookiesByName('jwtCookie')
         console.log(token)
