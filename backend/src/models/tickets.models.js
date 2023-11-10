@@ -1,6 +1,6 @@
 import { Schema, model } from "mongoose";
 import { v4 as uuidv4 } from "uuid";
-import { userModel } from "./users.models";
+import { userModel } from "./users.models.js";
 
 const ticketSchema = new Schema({
     code: {
