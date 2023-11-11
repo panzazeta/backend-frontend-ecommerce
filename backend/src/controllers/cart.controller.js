@@ -156,49 +156,78 @@ export const deleteCart = async (req, res) => {
 };
 
 export const postCheckout = async (req, res) => {
-    const cartId = req.params.cid;
+    const { cid } = req.params;
 
-  try {
-    const cart = await cartModel.findById(cartId).populate("items.product");
-    if (!cart) {
-      return res.status(404).json({ message: "Carrito no encontrado" });
+    try {
+        const cart = await cartModel.findById(cid);
+
+        if (!cart) {
+            return res.status(404).send({ respuesta: 'Error en finalizar compra', mensaje: 'Cart Not Found' });
+        }
+
+        const productsNotPurchased = []; // Almacenar los productos que no pudieron comprarse
+        let totalAmount = 0; // Inicializar el total a 0
+
+        const categorySubtotals = {}; // Almacenar sumas parciales por categoría
+
+        // Iterar sobre los productos en el carrito
+        for (const product of cart.products) {
+            const { id_prod, quantity } = product;
+
+            // Obtener el producto de la base de datos
+            const dbProduct = await productModel.findById(id_prod);
+
+            if (!dbProduct) {
+                return res.status(404).send({ respuesta: 'Error en finalizar compra', mensaje: 'Product Not Found' });
+            }
+
+            // Verificar si hay suficiente stock
+            if (dbProduct.stock >= quantity) {
+                // Restar la cantidad del carrito al stock del producto
+                dbProduct.stock -= quantity;
+                
+                // Actualizar el producto en la base de datos
+                await dbProduct.save();
+
+                // Calcular el subtotal para este producto
+                const subtotal = dbProduct.price * quantity;
+
+                // Acumular el subtotal en la categoría correspondiente
+                if (!categorySubtotals[dbProduct.category]) {
+                    categorySubtotals[dbProduct.category] = 0;
+                }
+
+                categorySubtotals[dbProduct.category] += subtotal;
+
+                // Acumular el subtotal en el total general
+                totalAmount += subtotal;
+            } else {
+                // Si no hay suficiente stock, agregar el producto a la lista de no comprados
+                productsNotPurchased.push(id_prod);
+
+                // Opcional: Eliminar el producto del carrito
+                cart.products = cart.products.filter(item => item.id_prod.toString() !== id_prod);
+            }
+        }
+
+        // Crear un ticket con la información de la compra y el total calculado
+        const ticket = await ticketModel.create({ amount: totalAmount, cart });
+
+        // Si hay productos que no pudieron comprarse, actualizar el carrito del usuario
+        if (productsNotPurchased.length > 0) {
+            // Filtrar los productos que no se pudieron comprar
+            cart.products = cart.products.filter(item => productsNotPurchased.includes(item.id_prod.toString()));
+
+            // Actualizar el carrito en la base de datos
+            await cartModel.findByIdAndUpdate(cid, { products: cart.products });
+        } else {
+            // Si todos los productos se compraron, vaciar el carrito
+            await cartModel.findByIdAndUpdate(cid, { products: [] });
+        }
+
+        res.status(200).send({ respuesta: 'OK', mensaje: 'Compra realizada con éxito', ticket });
+    } catch (error) {
+        console.error(error);
+        res.status(400).send({ respuesta: 'Error en finalizar compra', mensaje: error.message });
     }
-
-    const productsNotProcessed = []; 
-
-    for (const item of cart.items) {
-      const product = item.product;
-      const requestedQuantity = item.quantity;
-
-      if (product.stock >= requestedQuantity) {
-        // El producto tiene suficiente stock, restarlo
-        product.stock -= requestedQuantity;
-        await product.save();
-      } else {
-        // si el producto no tiene suficiente stock se almacenan en los no procesados
-        productsNotProcessed.push(product._id);
-      }
-    }
-
-    // se actualiza el carrito con los productos no procesados
-    cart.items = cart.items.filter(
-      (cartItem) => !productsNotProcessed.includes(cartItem.product._id)
-    );
-    await cart.save();
-
-    // se crea un ticket con los datos de la compra
-    const ticket = new ticketModel({
-      amount: cart.total, // Supongo que el carrito tiene un campo total
-      purchaser: cart.userEmail, // O donde se almacena el correo del usuario
-    });
-    await ticket.save();
-
-    return res.status(200).json({
-      message: "Compra finalizada exitosamente",
-      productsNotProcessed: productsNotProcessed,
-    });
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({ message: "Error al procesar la compra" });
-  }
 };
