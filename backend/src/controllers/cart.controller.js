@@ -162,7 +162,7 @@ export const postCheckout = async (req, res) => {
         const cart = await cartModel.findById(cid);
 
         if (!cart) {
-            return res.status(404).send({ respuesta: 'Error en finalizar compra', mensaje: 'Cart Not Found' });
+            return res.status(404).send({ respuesta: 'Error en Checkout', mensaje: 'Cart Not Found' });
         }
 
         const productosNoComprados = []; 
@@ -199,8 +199,8 @@ export const postCheckout = async (req, res) => {
         // TICKET CHECKOUT
         const ticket = await ticketModel.create({ amount: totalAmount, cart });
 
-        if (productsNotPurchased.length > 0) {
-            cart.products = cart.products.filter(item => productsNotPurchased.includes(item.id_prod.toString()));
+        if (productosNoComprados.length > 0) {
+            cart.products = cart.products.filter(item => productosNoComprados.includes(item.id_prod.toString()));
             await cartModel.findByIdAndUpdate(cid, { products: cart.products });
         } else {
             await cartModel.findByIdAndUpdate(cid, { products: [] }); //vacio cart luego del purchase
