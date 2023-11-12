@@ -172,22 +172,22 @@ export const postCheckout = async (req, res) => {
         for (const product of cart.products) {
             const { id_prod, quantity } = product;
 
-            const dbProduct = await productModel.findById(id_prod); //busco el producto en mongodb
+            const cadaProducto = await productModel.findById(id_prod); //defino variable cadaProducto para ir sumando los valores parciales/total
 
-            if (!dbProduct) {
+            if (!cadaProducto) {
                 return res.status(404).send({ respuesta: 'Error en finalizar compra', mensaje: 'Product Not Found' });
             }
 
-            if (dbProduct.stock >= quantity) {
-                dbProduct.stock -= quantity;
-                await dbProduct.save();
-                const prodSubtotal = dbProduct.price * quantity;
+            if (cadaProducto.stock >= quantity) {
+                cadaProducto.stock -= quantity;
+                await cadaProducto.save();
+                const prodSubtotal = cadaProducto.price * quantity;
 
-            if (!Subtotales[dbProduct.category]) {
-                Subtotales[dbProduct.category] = 0;
+            if (!Subtotales[cadaProducto.category]) {
+                Subtotales[cadaProducto.category] = 0;
                 }
 
-                Subtotales[dbProduct.category] += prodSubtotal;
+                Subtotales[cadaProducto.category] += prodSubtotal;
                 totalAmount += prodSubtotal;
 
             } else {
