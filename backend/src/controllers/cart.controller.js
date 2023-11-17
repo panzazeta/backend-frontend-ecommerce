@@ -166,7 +166,7 @@ export const postCheckout = async (req, res) => {
         }
 
         const productosNoComprados = []; 
-        let totalAmount = 0; 
+        let montoTotal = 0; 
         const Subtotales = {}; 
 
         for (const product of cart.products) {
@@ -188,7 +188,7 @@ export const postCheckout = async (req, res) => {
                 }
 
                 Subtotales[cadaProducto.category] += prodSubtotal;
-                totalAmount += prodSubtotal;
+                montoTotal += prodSubtotal;
 
             } else {
                 productosNoComprados.push(id_prod);
@@ -197,7 +197,7 @@ export const postCheckout = async (req, res) => {
         }
 
         // TICKET CHECKOUT
-        const ticket = await ticketModel.create({ amount: totalAmount, cart });
+        const ticket = await ticketModel.create({ amount: montoTotal, cart });
 
         if (productosNoComprados.length > 0) {
             cart.products = cart.products.filter(item => productosNoComprados.includes(item.id_prod.toString()));
