@@ -1,4 +1,5 @@
 import { productModel } from "../models/products.models.js";
+import { createProducts } from "../utils/productsCreate.js";
 
 export const getProducts = async (req, res) => {
     const { limit, page, filter, sort } = req.query
@@ -88,5 +89,14 @@ export const deleteProductById = async (req, res) => {
 
     } catch (error) {
         res.status(500).send({ error: `Error en eliminar producto ${error}` })
+    }
+}
+
+export const getMockingProducts = async (req, res) => {
+    try {
+        const mockProducts = createProducts();
+        return res.status(200).send(mockProducts);
+    } catch (error) {
+        res.status(500).send({ error: `Error en generar productos mock: ${error}` });
     }
 }
