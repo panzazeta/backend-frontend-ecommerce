@@ -5,8 +5,8 @@ const modelProduct = () => {
         _id: faker.database.mongodbObjectId(),
         title: faker.commerce.productName(),
         description: faker.commerce.productDescription(),
-        price: faker.commerce.price(),
-        stock: faker.number.int(),
+        price: parseFloat(faker.commerce.price()),
+        stock: faker.number.int(({ min: 0, max: 100 })),
         category: faker.commerce.department(),
         status: faker.datatype.boolean(),
         code: faker.commerce.isbn()
@@ -15,7 +15,7 @@ const modelProduct = () => {
 
 export const createProducts = () => {
     const products = [];
-    for (let i = 0 ; i < 100 ; i++) {
+    for (let i = 0 ; i < 3 ; i++) {
         products.push(modelProduct());
     }
     return products
