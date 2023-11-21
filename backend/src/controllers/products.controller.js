@@ -22,6 +22,15 @@ export const getProducts = async (req, res) => {
 
 }
 
+export const getMockingProducts = async (req, res) => {
+    try {
+        const mockProducts = createProducts();
+        return res.status(200).send(mockProducts);
+    } catch (error) {
+        res.status(500).send({ error: `Error en generar productos mock: ${error}` });
+    }
+}
+
 export const getProductById = async (req, res) => {
     const { id } = req.params
 
@@ -92,11 +101,3 @@ export const deleteProductById = async (req, res) => {
     }
 }
 
-export const getMockingProducts = async (req, res) => {
-    try {
-        const mockProducts = createProducts();
-        return res.status(200).send(mockProducts);
-    } catch (error) {
-        res.status(500).send({ error: `Error en generar productos mock: ${error}` });
-    }
-}
