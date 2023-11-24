@@ -15,7 +15,7 @@ const modelProduct = () => {
 
 export const createProducts = () => {
     const products = [];
-    for (let i = 0 ; i < 3 ; i++) {
+    for (let i = 0 ; i < 100 ; i++) {
         products.push(modelProduct());
     }
     return products
