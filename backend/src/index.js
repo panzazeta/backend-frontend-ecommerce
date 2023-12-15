@@ -11,6 +11,8 @@ import router from "./routes/index.routes.js";
 import { messageModel } from './models/message.models.js';
 import { __dirname } from "./path.js";
 import { Server } from "socket.io";
+import swaggerJSDoc from "swagger-jsdoc";
+import swaggerUiExpress from "swagger-ui-express";
 
 const whiteList = ["http://localhost:5173"]
 
@@ -73,6 +75,21 @@ const auth = (req, res, next) => {
       res.redirect("/login");
     }
   };
+
+//Swagger
+const swaggerOptions = {
+	definition: {
+		openapi: "3.1.0",
+		info: {
+			title: "Documentación Proyecto Ecommerce Backend",
+			description: "API Coder Backend" 
+		}
+	},
+	apis: [`${__dirname}/docs/**/*.yaml`] //subcarpeta genérica
+}
+
+const specs =  swaggerJSDoc(swaggerOptions)
+app.use("/apidocs", swaggerUiExpress.serve, swaggerUiExpress.setup(specs))
 
 //Server Socket
 const io = new Server(serverExpress);
