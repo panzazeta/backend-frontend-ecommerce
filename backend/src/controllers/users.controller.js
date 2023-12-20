@@ -29,9 +29,9 @@ export const getUser = async (req, res) => {
 
 export const putUser = async (req, res) => {
     const { id } = req.params
-    const { first_name, last_name, age, email, password } = req.body
+    const { first_name, last_name, age, email, password, premium } = req.body
     try {
-        const user = await userModel.findByIdAndUpdate(id, { first_name, last_name, age, email, password })
+        const user = await userModel.findByIdAndUpdate(id, { first_name, last_name, age, email, password, premium })
         if (user) {
             res.status(200).send({ respuesta: 'OK', mensaje: user })
         } else {
