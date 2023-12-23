@@ -208,7 +208,7 @@ export const postCheckout = async (req, res) => {
         // TICKET CHECKOUT
         const purchaser = user.email;
         // Verificar si el usuario es premium y ajustar el montoTotal
-        if (purchaser.premium) {
+        if (user.premium) {
             montoTotal *= 0.9; // Aplicar descuento del 10% para usuarios premium
         }
 
