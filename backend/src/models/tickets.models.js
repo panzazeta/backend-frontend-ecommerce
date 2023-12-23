@@ -18,6 +18,9 @@ const ticketSchema = new Schema({
     purchaser: {
         type: String,
         ref: 'user'
+    },
+    message: {
+        type: String
     }
 });
 

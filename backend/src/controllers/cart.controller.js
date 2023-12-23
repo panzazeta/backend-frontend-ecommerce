@@ -207,12 +207,15 @@ export const postCheckout = async (req, res) => {
 
         // TICKET CHECKOUT
         const purchaser = user.email;
+        let ticketMessage = 'Compra realizada con éxito';
+        
         // Verificar si el usuario es premium y ajustar el montoTotal
         if (user.premium) {
             montoTotal *= 0.9; // Aplicar descuento del 10% para usuarios premium
+            ticketMessage = 'Compra realizada con éxito (Descuento por usuario premium aplicado)';
         }
 
-        const ticket = await ticketModel.create({ amount: montoTotal, cart, purchaser });
+        const ticket = await ticketModel.create({ amount: montoTotal, cart, purchaser, message: ticketMessage });
     
         if (productosNoComprados.length > 0) {
             cart.products = cart.products.filter(item => productosNoComprados.includes(item.id_prod.toString()));
@@ -221,7 +224,7 @@ export const postCheckout = async (req, res) => {
             await cartModel.findByIdAndUpdate(cid, { products: [] });
         }
 
-        res.status(200).send({ respuesta: 'OK', mensaje: 'Compra realizada con éxito', ticket });
+        res.status(200).send({ respuesta: 'OK', mensaje: ticket.message, ticket });
     } catch (error) {
         console.error(error);
         res.status(400).send({ respuesta: 'Error en finalizar compra', mensaje: error.message });
