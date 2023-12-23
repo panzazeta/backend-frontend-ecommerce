@@ -17,16 +17,16 @@ const ticketSchema = new Schema({
     },
     purchaser: {
         type: String,
-        ref: 'User'
+        ref: 'user'
     }
 });
 
 ticketSchema.pre('save', async function(next) {
     this.code = uuidv4();
     try {
-        const user = await userModel.findOne({ cart: this.cart });
-        if (user) {
-            this.purchaser = user.email;
+        const user = await userModel.findById(this.user_id);;
+        if (user && user.email) {
+            this.purchaser = user.email; // Asigna el email del usuario a purchase
         }
     } catch (error) {
         return next(error);

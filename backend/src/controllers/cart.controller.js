@@ -1,6 +1,7 @@
 import { cartModel } from "../models/carts.models.js";
 import { productModel } from "../models/products.models.js";
 import { ticketModel } from "../models/tickets.models.js"
+import { userModel } from "../models/users.models.js";
 
 export const getCart = async (req, res) => {
     const { cid } = req.params
@@ -161,51 +162,63 @@ export const postCheckout = async (req, res) => {
     const { cid } = req.params;
 
     try {
-        const cart = await cartModel.findById(cid);
+        const cart = await cartModel.findById(cid).populate('products.id_prod');
 
         if (!cart) {
             return res.status(404).send({ respuesta: 'Error en Checkout', mensaje: 'Cart Not Found' });
         }
 
-        const productosNoComprados = []; 
-        let montoTotal = 0; 
-        const Subtotales = {}; 
+        // Encuentra al usuario asociado al carrito
+        const user = await userModel.findOne({ cart: cart._id });
+        
+        if (!user) {
+            return res.status(404).send({ respuesta: 'Error en Checkout', mensaje: 'User Not Found' });
+        }
+
+        const productosNoComprados = [];
+        let montoTotal = 0;
+        const Subtotales = {};
 
         for (const product of cart.products) {
             const { id_prod, quantity } = product;
 
-            const cadaProducto = await productModel.findById(id_prod); //defino variable cadaProducto para ir sumando los valores parciales/total
-
-            if (!cadaProducto) {
+            if (!id_prod) {
                 return res.status(404).send({ respuesta: 'Error en finalizar compra', mensaje: 'Product Not Found' });
             }
+
+            const cadaProducto = id_prod;
 
             if (cadaProducto.stock >= quantity) {
                 cadaProducto.stock -= quantity;
                 await cadaProducto.save();
                 const prodSubtotal = cadaProducto.price * quantity;
 
-            if (!Subtotales[cadaProducto.category]) {
-                Subtotales[cadaProducto.category] = 0;
+                if (!Subtotales[cadaProducto.category]) {
+                    Subtotales[cadaProducto.category] = 0;
                 }
 
                 Subtotales[cadaProducto.category] += prodSubtotal;
                 montoTotal += prodSubtotal;
-
             } else {
                 productosNoComprados.push(id_prod);
-                cart.products = cart.products.filter(item => item.id_prod.toString() !== id_prod);
+                cart.products = cart.products.filter(item => item.id_prod.toString() !== id_prod.toString());
             }
         }
 
         // TICKET CHECKOUT
-        const ticket = await ticketModel.create({ amount: montoTotal, cart });
+        const purchaser = user.email;
+        // Verificar si el usuario es premium y ajustar el montoTotal
+        if (purchaser.premium) {
+            montoTotal *= 0.9; // Aplicar descuento del 10% para usuarios premium
+        }
 
+        const ticket = await ticketModel.create({ amount: montoTotal, cart, purchaser });
+    
         if (productosNoComprados.length > 0) {
             cart.products = cart.products.filter(item => productosNoComprados.includes(item.id_prod.toString()));
             await cartModel.findByIdAndUpdate(cid, { products: cart.products });
         } else {
-            await cartModel.findByIdAndUpdate(cid, { products: [] }); //vacio cart luego del purchase
+            await cartModel.findByIdAndUpdate(cid, { products: [] });
         }
 
         res.status(200).send({ respuesta: 'OK', mensaje: 'Compra realizada con éxito', ticket });
