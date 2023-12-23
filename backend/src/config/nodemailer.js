@@ -1,4 +1,7 @@
 import nodemailer from 'nodemailer'
+import dotenv from "dotenv"
+
+const password_email = process.env.PASSWORD_EMAIL
 
 const transport = nodemailer.createTransport({
     host: 'smtp.gmail.com',
@@ -6,7 +9,7 @@ const transport = nodemailer.createTransport({
     secure: true,
     auth: {
         user: 'joealvarezsanabria23@gmail.com',
-        pass: 'gjld waay cpcb zpha',
+        pass: password_email,
         authMethod: 'LOGIN'
     }
 })
