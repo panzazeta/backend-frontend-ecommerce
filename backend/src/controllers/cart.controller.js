@@ -168,7 +168,6 @@ export const postCheckout = async (req, res) => {
             return res.status(404).send({ respuesta: 'Error en Checkout', mensaje: 'Cart Not Found' });
         }
 
-        // Encuentra al usuario asociado al carrito
         const user = await userModel.findOne({ cart: cart._id });
         
         if (!user) {
@@ -209,9 +208,8 @@ export const postCheckout = async (req, res) => {
         const purchaser = user.email;
         let ticketMessage = 'Compra realizada con éxito';
         
-        // Verificar si el usuario es premium y ajustar el montoTotal
         if (user.premium) {
-            montoTotal *= 0.9; // Aplicar descuento del 10% para usuarios premium
+            montoTotal *= 0.9; // Aplico un descuento del 10% a los usuarios premium
             ticketMessage = 'Compra realizada con éxito (Descuento por usuario premium aplicado)';
         }
 

@@ -29,7 +29,7 @@ ticketSchema.pre('save', async function(next) {
     try {
         const user = await userModel.findById(this.user_id);;
         if (user && user.email) {
-            this.purchaser = user.email; // Asigna el email del usuario a purchase
+            this.purchaser = user.email;
         }
     } catch (error) {
         return next(error);
