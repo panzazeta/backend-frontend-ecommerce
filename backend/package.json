@@ -5,7 +5,11 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "dev": "nodemon src/index.js"
+    "dev": "nodemon src/index.js",
+    "test": "mocha test/UserTest.test.js",
+    "productssupertest": "mocha test/Products.supertest.test.js",
+    "cartsupertest": "mocha test/Carts.supertest.test.js",
+    "sessionsupertest": "mocha test/Sessions.supertest.test.js"
   },
   "keywords": [],
   "author": "",
