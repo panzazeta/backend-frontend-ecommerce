@@ -35,11 +35,11 @@ describe("Test CRUD de usuario en la ruta api/users", function () {
 
   it("Crear un nuevo usuario mediante el método Post", async () => {
     const newuser = {
-      first_name: "carlos 23",
-      last_name: "gomez",
-      email: "prueba12@prueba.com",
-      password: "@@@ojegijlf333",
-      age: 56,
+      first_name: "carlos 24",
+      last_name: "gomeze",
+      email: "prueba123@prueba.com",
+      password: "@@@ojegijlf3332",
+      age: 57,
     };
 
     const user = await userModel.create(newuser);
@@ -49,10 +49,10 @@ describe("Test CRUD de usuario en la ruta api/users", function () {
 
   it("Actualizar un usuario mediante el método Put", async () => {
     const updateUser = {
-      first_name: "Daniel",
-      last_name: "Torres",
+      first_name: "Daniepol",
+      last_name: "Torrese",
       email: "prueba3555@prueba.com",
-      password: "@@@ojegijlf333",
+      password: "@@@ojegijlf3332",
       age: 55,
     };
 
@@ -66,7 +66,7 @@ describe("Test CRUD de usuario en la ruta api/users", function () {
 
   it("Eliminar un usuario mediante el método Delete", async () => {
     const result = await userModel.findByIdAndDelete(
-      "6593ec1a6c1faf1e3228381b"
+      "6543d6f529ca96844b782e85"
     );
 
     assert.strictEqual(typeof result, "object");
