@@ -16,7 +16,7 @@ describe("Test CRUD del carrito en api/carts", function () {
 });
 
 describe("Pruebas para la ruta /api/carts/:cid/products/:pid", () => {
-  it("Ruta: api/catrs metodo Post", async () => {
+  it("Ruta: api/carts metodo Post", async () => {
     
     const carritoId = "6593ecd5c8a4d31e8816e417";
     const productoId = "65022390bf2ac75bb917837c";

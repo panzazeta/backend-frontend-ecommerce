@@ -6,9 +6,9 @@ import supertest from 'supertest'
 const requester = supertest('http://localhost:4000')
 
 await mongoose.connect(process.env.MONGO_URL)
+let cookie = {};
 
 describe('Test Users Session api/sessions', function () {
-    let cookie = {};
     this.timeout(5000);
 
     it("Ruta: api/sessions/register con metodo POST", async () => {
