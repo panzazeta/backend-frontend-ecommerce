@@ -5,29 +5,30 @@ import supertest from 'supertest'
 
 const requester = supertest('http://localhost:4000')
 
-
 await mongoose.connect(process.env.MONGO_URL)
 
-describe('Test Users Session api/session', function () {
+describe('Test Users Session api/sessions', function () {
     let cookie = {};
     this.timeout(5000);
 
-    it("Ruta: api/session/register con metodo POST", async () => {
+    it("Ruta: api/sessions/register con metodo POST", async () => {
         const newUser = {
-            first_name: "Sandra",
-            last_name: "Sanchez",
-            email: "sane131we@saewn131223.com",
-            password: "sa@sa.com"
+            first_name: "Gogol",
+            last_name: "Perezori",
+            age: 26,
+            email: "gogo@gmail.com",
+            password: "sarassa"
         }
 
-        const { _body } = await requester.post('/api/sessions/register').send(newUser)
-
-        console.log('Respuesta de la solicitud POST:', _body);
-
-        expect(_body.payload).to.be.ok
-    })
-    
-    // it("Ruta: api/session/login con metodo POST", async () => {
+        const { statusCode, _body } = await requester
+        .post("/api/sessions/register")
+        .send(newUser);
+  
+      expect(statusCode).to.equal(201);
+      expect(_body.mensaje).to.equal("Usuario registrado");
+    });
+       
+    // it("Ruta: api/sessions/login con metodo POST", async () => {
     //     const user = {
     //         email: "san@san.com",
     //         password: "sa@sa.com"
