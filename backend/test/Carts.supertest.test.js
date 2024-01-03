@@ -13,8 +13,8 @@ describe("Test de carritos en la ruta api/carts", function () {
 
   it("Ruta: api/sessions/login con metodo POST", async function () {
         const user = {
-            email: "jorge13@gmail.com",
-            password: "lucas1"
+            email: "gogo@gmail.com",
+            password: "sarassa"
         }
 
     const { _body, ok } = await requester.post("/sessions/login").send(user);
@@ -27,12 +27,17 @@ describe("Pruebas para la ruta /api/carts/:cid/products/:pid", () => {
     
     const cartId = "65036104a64cefd4eca177a1";
     const productId = "650223e3bf2ac75bb9178382";
-    const cantidad = 2;
+    const cantidad = {
+      quantity: 5,
+    };
 
     const response = await requester
       .post(`/api/carts/${cartId}/products/${productId}`)
-      .send({ quantity: cantidad });
-
+      .send(cantidad);
+    
+    console.log("Mensaje!");
+    console.log(response.body);
+    
     expect(response.status).to.equal(200);
   });
 })
