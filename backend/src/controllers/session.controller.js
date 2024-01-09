@@ -1,4 +1,5 @@
 import { generateToken } from "../utils/jwt.js";
+import { userModel } from "../models/users.models.js";
 
 export const login = async (req, res) => {
     try {
@@ -13,19 +14,23 @@ export const login = async (req, res) => {
             age: req.user.age,
             email: req.user.email
             res.status(200).send({mensaje: "Usuario logueado"})
-        }*/
-
+        // }*/
+        await userModel.findByIdAndUpdate(req.user._id, { last_connection: Date.now() });
         const token = generateToken(req.user)
+        const updatedUser = await userModel.findById(req.user._id);
 
-        res.status(200).send({ token })
+        const loginDate = new Date(updatedUser.last_connection).toLocaleString();
+        
+        res.status(200).send({
+            token,
+            last_connection: `${loginDate}`
+        });
+
     } catch (error) {
         res.status(500).send({ mensaje: `Error al iniciar sesion ${error}` })
     }
 
 }
-
-
-
 
 export const register = async (req, res) => {
     try {
@@ -40,10 +45,18 @@ export const register = async (req, res) => {
 }
 
 export const logout = async (req, res) => {
-    /*Si manejo sesiones en BDD*
-    if (req.session.login) {
-        req.session.destroy()
-    }*/
-    res.clearCookie('jwtCookie')
-    res.status(200).send({ resultado: 'Usuario deslogueado' })
-}
+        if (req.user) {
+            // Actualiza last_connection al hacer logout
+            await userModel.findByIdAndUpdate(req.user._id, { last_connection: Date.now() });
+        }
+
+        const updatedUser = await userModel.findById(req.user._id);
+        const logoutDate = new Date(updatedUser.last_connection).toLocaleString();
+
+        res.clearCookie('jwtCookie');
+        res.status(200).send({
+            resultado: 'Usuario deslogueado',
+            last_connection: `${logoutDate}`
+        });
+    
+};

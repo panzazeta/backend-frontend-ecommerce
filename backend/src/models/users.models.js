@@ -36,6 +36,14 @@ const userSchema = new Schema({
     premium: {
         type: Boolean,
         default: false
+    },
+    documents: [{
+        name: String,
+        reference: String
+    }],
+    last_connection: {
+        type: Date,
+        default: null
     }
 })
 
