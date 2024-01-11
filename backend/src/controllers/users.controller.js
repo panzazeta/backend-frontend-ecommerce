@@ -101,3 +101,40 @@ export const resetPassword = async (req, res) => {
         res.status(500).send(`Error al modificar contraseña ${error}`)
     }
 }
+
+export const postDocuments = async (req, res) => {
+    try{
+        if(!req.file){
+            return res.status(400).send({ message: 'Error al cargar archivo' });
+        }
+        return res.status(200).send({ message: 'Archivo cargado exitosamente' });
+    } catch{
+        return res.status(500).json({ message: 'Hubo un error al cargar los archivos' })
+    }
+}
+
+export const postProfilePicture = async (req,res) => {
+    try{
+        if(!req.file){
+            return res.status(400).send({ message: 'Error al cargar la imagen'})
+        }
+
+        return res.status(200).send({ message: 'Imagen cargada exitosamente'})
+
+    }catch{
+
+        return res.status(500).json({ message: 'Hubo un error al subir la imagen de perfil' });
+    }
+}
+
+export const postProductsImage = async (req, res) => {
+    try{
+        if(!req.file){
+            return res.status(400).send({ message: 'Error al cargar la imagen del producto' })
+        }
+        return res.status(200).send({ message: 'Imagen del producto cargada exitosamente' })
+
+    }catch{
+        return res.status(500).send({ message: 'Error al intentar subir imagen del producto' })
+    }
+}

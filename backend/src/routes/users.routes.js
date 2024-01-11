@@ -1,5 +1,6 @@
 import { Router } from "express";
-import { getUsers, getUser, putUser, deleteUser, recoveryMail, resetPassword } from "../controllers/users.controller.js";
+import { getUsers, getUser, putUser, deleteUser, recoveryMail, resetPassword, postDocuments, postProductsImage, postProfilePicture } from "../controllers/users.controller.js";
+import { upload } from "../config/multer.js";
 
 
 const userRouter = Router()
@@ -10,5 +11,8 @@ userRouter.put('/:id', putUser);
 userRouter.delete('/:id', deleteUser);
 userRouter.post('/password-recovery', recoveryMail);
 userRouter.post('/reset-password/:token', resetPassword);
+userRouter.post('/:id/documents', upload.array('documents'), postDocuments);
+userRouter.post('/:id/profiles', upload.single('profileImage'), postProfilePicture);
+userRouter.post('/:id/products', upload.single('productImage'), postProductsImage);
 
 export default userRouter
