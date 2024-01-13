@@ -27,7 +27,7 @@ const corsOptions = {
 }
 
 const app = express()
-const PORT = 4000
+const PORT = 3000
 
 const serverExpress = app.listen(PORT, () => {
     console.log(`Server on port ${PORT}`)

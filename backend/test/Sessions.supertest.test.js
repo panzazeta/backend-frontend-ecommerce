@@ -3,7 +3,7 @@ import {expect} from "chai";
 import mongoose from 'mongoose'
 import supertest from 'supertest'
 
-const requester = supertest('http://localhost:4000')
+const requester = supertest('http://localhost:3000')
 
 await mongoose.connect(process.env.MONGO_URL)
 let cookie = {};
