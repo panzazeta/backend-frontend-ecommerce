@@ -97,18 +97,25 @@ export const putCart = async (req, res) => {
             return res.status(400).send({ respuesta: 'Error en actualizar carrito', mensaje: 'Please send a valid array' });
         }
 
-        newProducts.forEach((newProduct) => {
+        for (const newProduct of newProducts) {
             const { id_prod, quantity } = newProduct;
-            const isProductIndex = cart.products.findIndex(item => item.id_prod === id_prod);
 
-            if (isProductIndex !== -1) {
-               cart.products[isProductIndex].quantity = quantity;
+            const existingProductIndex = cart.products.findIndex(item => item.id_prod._id.toString() === id_prod);
+            
+            if (existingProductIndex !== -1) {
+                cart.products[existingProductIndex].quantity = quantity;
             } else {
-               cart.products.push({ id_prod, quantity });
+                
+                const productToAdd = {
+                    id_prod: id_prod,
+                    quantity: quantity
+                };
+                cart.products.push(productToAdd);
             }
-        });
+        }
 
-        const updatedCart = await cartModel.findByIdAndUpdate(cid, cart);
+        const updatedCart = await cart.save();
+
         res.status(200).send({ respuesta: 'OK', mensaje: updatedCart });
 
     } catch (error) {

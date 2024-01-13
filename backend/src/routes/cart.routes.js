@@ -6,10 +6,10 @@ const cartRouter = Router()
 
 cartRouter.get('/:cid', getCart);
 cartRouter.post('/', postCart);
-cartRouter.post('/:cid/products/:pid', passportError('jwt'), authorization('user'), postCartProduct) //solo user puede agregar productos al cart
-cartRouter.delete('/:cid/products/:pid', deleteCartProduct);
+cartRouter.post('/:cid/product/:pid', passportError('jwt'), authorization('user'), postCartProduct) //solo user puede agregar productos al cart
+cartRouter.delete('/:cid/product/:pid', deleteCartProduct);
 cartRouter.put('/:cid', putCart);
-cartRouter.put('/:cid/products/:pid', putCartProduct);
+cartRouter.put('/:cid/product/:pid', putCartProduct);
 cartRouter.delete('/:cid', deleteCart);
 cartRouter.post('/:cid/purchase', postCheckout);
 

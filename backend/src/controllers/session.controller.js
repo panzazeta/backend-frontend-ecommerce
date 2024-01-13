@@ -45,18 +45,25 @@ export const register = async (req, res) => {
 }
 
 export const logout = async (req, res) => {
+    try {
+        console.log(req.user);
+
         if (req.user) {
             // Actualiza last_connection al hacer logout
             await userModel.findByIdAndUpdate(req.user._id, { last_connection: Date.now() });
+
+            const updatedUser = await userModel.findById(req.user._id);
+            const logoutDate = new Date(updatedUser.last_connection).toLocaleString();
+
+            res.clearCookie('jwtCookie');
+            res.status(200).send({
+                resultado: 'Usuario deslogueado',
+                last_connection: `${logoutDate}`
+            });
+        } else {
+            res.status(401).send({ resultado: 'Usuario no autenticado' });
         }
-
-        const updatedUser = await userModel.findById(req.user._id);
-        const logoutDate = new Date(updatedUser.last_connection).toLocaleString();
-
-        res.clearCookie('jwtCookie');
-        res.status(200).send({
-            resultado: 'Usuario deslogueado',
-            last_connection: `${logoutDate}`
-        });
-    
+    } catch (error) {
+        res.status(500).send({ mensaje: `Error al cerrar sesión ${error}` });
+    }
 };
