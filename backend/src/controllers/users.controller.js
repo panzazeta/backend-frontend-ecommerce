@@ -1,5 +1,5 @@
 import { userModel } from "../models/users.models.js";
-import { sendRecoveryMail } from "../config/nodemailer.js";
+import { sendRecoveryMail, sendDeletedAccount  } from "../config/nodemailer.js";
 import crypto from "crypto";
 
 const recoveryLinks = {}
@@ -69,6 +69,10 @@ export const deleteInactiveUsers = async (req, res) => {
         if (usersToDelete.length > 0) {
             const deletionResult = await userModel.deleteMany({
                 _id: { $in: usersToDelete.map(user => user._id) }
+            });
+
+            usersToDelete.forEach(async (user) => {
+                await sendDeletedAccount(user.email);
             });
 
             res.status(200).send({

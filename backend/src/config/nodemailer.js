@@ -29,3 +29,19 @@ export const sendRecoveryMail = (email, recoveryLink) => {
             console.log('Email enviado correctamente')
     })
 }
+
+export const sendDeletedAccount = (email) => {
+    const mailOptions = {
+        from: 'joealvarezsanabria23@gmail.com',
+        to: email,
+        subject: 'Cuenta eliminada',
+        text: `Se ha eliminado su cuenta por inactividad. AZO.`
+    }
+
+    transport.sendMail(mailOptions, (error, info) => {
+        if (error)
+            console.log(error)
+        else
+            console.log('Email enviado correctamente')
+    })
+}
