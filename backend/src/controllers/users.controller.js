@@ -6,7 +6,7 @@ const recoveryLinks = {}
 
 export const getUsers = async (req, res) => {
     try {
-        const users = await userModel.find()
+        const users = await userModel.find().select('first_name email rol');
         res.status(200).send({ respuesta: 'OK', mensaje: users })
     } catch (error) {
         res.status(400).send({ respuesta: 'Error en consultar usuarios', mensaje: error })
