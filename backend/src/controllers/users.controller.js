@@ -56,6 +56,36 @@ export const deleteUser = async (req, res) => {
     }
 }
 
+export const deleteInactiveUsers = async (req, res) => {
+    try {
+        const currentTime = new Date();
+        const thresholdMinutes = 2; // Tiempo en minutos para considerar inactivo
+
+        const usersToDelete = await userModel.find({
+            rol: 'user',
+            last_connection: { $lt: new Date(currentTime - thresholdMinutes * 60000) },
+        });
+
+        if (usersToDelete.length > 0) {
+            const deletionResult = await userModel.deleteMany({
+                _id: { $in: usersToDelete.map(user => user._id) }
+            });
+
+            res.status(200).send({
+                respuesta: 'OK',
+                mensaje: `${deletionResult.deletedCount} usuarios inactivos eliminados.`,
+            });
+        } else {
+            res.status(200).send({
+                respuesta: 'OK',
+                mensaje: 'No hay usuarios inactivos para eliminar.',
+            });
+        }
+    } catch (error) {
+        res.status(500).send({ respuesta: 'Error al eliminar usuarios inactivos', mensaje: error });
+    }
+};
+
  //Enviar el mail
 export const recoveryMail = async (req, res) => {
  const { email } = req.body
