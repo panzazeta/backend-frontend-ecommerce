@@ -1,4 +1,5 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import NavBar from "./components/NavBar/NavBar";
 import { Registro } from './components/Registro/Registro'
 import { Logueo } from './components/Logueo/Logueo'
 import { Products }  from './components/Productos/Productos'
@@ -9,6 +10,7 @@ export const App = () => {
   return (
     <>
       <BrowserRouter>
+      <NavBar />
         <Routes>
           <Route path='/register' element={<Registro />} />
           <Route path='/login' element={<Logueo />} />
