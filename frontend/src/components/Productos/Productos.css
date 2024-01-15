@@ -1,0 +1,23 @@
+.productos-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px; /* Espacio entre las tarjetas */
+  }
+  
+  .product-card {
+    border: 1px solid #ddd;
+    padding: 15px;
+    width: calc(33.33% - 20px); /* Ancho de cada tarjeta en tres columnas con espacio entre ellas */
+    box-sizing: border-box;
+    margin-bottom: 20px; /* Espacio entre las filas de tarjetas */
+  }
+  
+  .product-card h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+  }
+  
+  .product-card p {
+    font-size: 16px;
+    margin-bottom: 5px;
+  }

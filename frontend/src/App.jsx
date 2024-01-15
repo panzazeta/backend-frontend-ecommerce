@@ -1,17 +1,19 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import { Register } from './components/Register'
-import { Login } from './components/Login'
-import { Products } from './components/Products'
-import { NewProducts } from './components/NewProducts'
+import { Registro } from './components/Registro/Registro'
+import { Logueo } from './components/Logueo/Logueo'
+import { Products } from './components/Productos/Productos'
+import { NuevosProductos } from './components/NuevosProductos/NuevosProductos'
+
+
 export const App = () => {
   return (
     <>
       <BrowserRouter>
         <Routes>
-          <Route path='/register' element={<Register />} />
-          <Route path='/login' element={<Login />} />
+          <Route path='/register' element={<Registro />} />
+          <Route path='/login' element={<Logueo />} />
           <Route path='/products' element={<Products />} />
-          <Route path='/new-product' element={<NewProducts />} />
+          <Route path='/new-product' element={<NuevosProductos />} />
         </Routes>
       </BrowserRouter>
     </>

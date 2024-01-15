@@ -1,8 +1,8 @@
 import { useRef } from "react"
 import { useNavigate } from "react-router-dom"
-import { getCookiesByName } from "../utils/formsUtils.js"
+import { getCookiesPorNombre } from "../../utils/formHelper"
 
-export const NewProducts = () => {
+export const NuevosProductos = () => {
     const formRef = useRef(null)
     const navigate = useNavigate()
 
@@ -10,9 +10,9 @@ export const NewProducts = () => {
         e.preventDefault()
         const datForm = new FormData(formRef.current) //Tranformo un HTML en un object iterator
         const data = Object.fromEntries(datForm)
-        const token = getCookiesByName('jwtCookie')
+        const token = getCookiesPorNombre('jwtCookie')
         console.log(token)
-        const response = await fetch('http://localhost:4000/api/products', {
+        const response = await fetch('http://localhost:3000/api/products', {
             method: 'POST',
             headers: {
                 'Authorization': `${token}`,
