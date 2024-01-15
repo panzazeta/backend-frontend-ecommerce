@@ -1,7 +1,7 @@
 import './Productos.css';
 import { useEffect, useState } from 'react';
 import { getCookiesPorNombre } from '../../utils/formHelper'
-import Product from '../ProductoDetalle/ProductoDetalle';
+import  Product  from '../ProductoDetalle/ProductoDetalle';
 import Logout from '../Logout/Logout'
 
 export const Products = () => {

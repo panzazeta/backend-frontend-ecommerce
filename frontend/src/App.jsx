@@ -1,7 +1,7 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { Registro } from './components/Registro/Registro'
 import { Logueo } from './components/Logueo/Logueo'
-import { Products } from './components/Productos/Productos'
+import { Products }  from './components/Productos/Productos'
 import { NuevosProductos } from './components/NuevosProductos/NuevosProductos'
 
 
