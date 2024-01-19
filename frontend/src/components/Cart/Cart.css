@@ -1,0 +1,21 @@
+.cart-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .cart-item {
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 8px;
+    background-color: #f8f8f8;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .cart-item h3 {
+    margin-bottom: 5px;
+  }
+  
+  .cart-item p {
+    margin: 5px 0;
+  }

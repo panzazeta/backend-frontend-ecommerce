@@ -59,7 +59,7 @@ export const deleteUser = async (req, res) => {
 export const deleteInactiveUsers = async (req, res) => {
     try {
         const currentTime = new Date();
-        const thresholdMinutes = 2; // Tiempo en minutos para considerar inactivo
+        const thresholdMinutes = 30; // Tiempo en minutos para considerar inactivo
 
         const usersToDelete = await userModel.find({
             rol: 'user',

@@ -1,30 +1,37 @@
 import { useRef } from "react"
 import { useNavigate } from "react-router-dom"
-export const Logueo = () => {
+import { useUser } from "../../utils/userContext"
 
-    const formRef = useRef(null)
-    const navigate = useNavigate()
+export const Logueo = () => {
+    const formRef = useRef(null);
+    const navigate = useNavigate();
+    const { updateCartId } = useUser();
 
     const handleSumbit = async (e) => {
-        e.preventDefault()
-        const datForm = new FormData(formRef.current) //Tranformo un HTML en un objet iterator
-        const data = Object.fromEntries(datForm)
+        e.preventDefault();
+        const datForm = new FormData(formRef.current);
+        const data = Object.fromEntries(datForm);
 
-        const response = await fetch('http://localhost:3000/api/session/login', {
-            method: 'POST',
-            headers: {
-                'Content-type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        })
-        if (response.status == 200) {
-            const datos = await response.json()
-            console.log(datos)
-            document.cookie = `jwtCookie=${datos.token}; expires${new Date(Date.now() + 1 * 24 * 60 * 60 * 1000).toUTCString()};path=/;`
-            navigate('/products')
+        try {
+            const response = await fetch('http://localhost:3000/api/session/login', {
+                method: 'POST',
+                headers: {
+                    'Content-type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
 
-        } else {
-            console.log(response)
+            if (response.status === 200) {
+                const datos = await response.json();
+                console.log(datos);
+                // updateCartId(datos.user.cart);
+                document.cookie = `jwtCookie=${datos.token}; expires${new Date(Date.now() + 1 * 24 * 60 * 60 * 1000).toUTCString()};path=/;`;
+                navigate('/products');
+            } else {
+                console.log(response);
+            }
+        } catch (error) {
+            console.error('Error al procesar la respuesta del servidor:', error);
         }
     }
 
@@ -42,7 +49,6 @@ export const Logueo = () => {
                 </div>
                 <button type="submit" className="btn btn-primary">Iniciar Sesion</button>
             </form>
-
         </div>
-    )
+    );
 }
